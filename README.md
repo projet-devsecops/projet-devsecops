@@ -261,4 +261,3 @@ flask-htmlx  django-soft  rocket
 
 ---
 
-© 2025 – Younes KOUBOUSSE – ESTIAM Paris
