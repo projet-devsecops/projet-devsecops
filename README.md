@@ -8,13 +8,13 @@ Module : E5 - DevSecOps
 
 ---
 
-## 🌍 Contexte du projet
+##  Contexte du projet
 
 Ce projet s’inscrit dans le cadre du module DevSecOps de l’école ESTIAM. Il a pour objectif de nous initier à la conteneurisation d’applications, à la gestion des dépendances, au déploiement multi-services via Docker Compose, ainsi qu’à l’intégration d’un reverse proxy (Nginx). Le tout dans une logique d'automatisation et d'orchestration d’environnements logiciels.
 
 ---
 
-## 🎯 Objectifs pédagogiques
+##  Objectifs pédagogiques
 
 - Créer un environnement isolé pour chaque application via des conteneurs Docker.
 - Utiliser `Dockerfile` pour construire les images.
@@ -24,7 +24,7 @@ Ce projet s’inscrit dans le cadre du module DevSecOps de l’école ESTIAM. Il
 
 ---
 
-## 🧱 Étape 1 – Structure du projet
+##  Étape 1 – Structure du projet
 
 La première étape a été d’identifier les projets à déployer. J’ai choisi 4 applications web différentes pour illustrer plusieurs technologies :
 
@@ -53,11 +53,11 @@ projet-devsecops/
 
 ---
 
-## 🐳 Étape 2 – Dockerisation des applications
+##  Étape 2 – Dockerisation des applications
 
 J’ai ajouté un fichier `Dockerfile` dans chaque dossier :
 
-### 🔸 Exemple pour Flask (flask-soft) :
+###  Exemple pour Flask (flask-soft) :
 ```dockerfile
 FROM python:3.10-slim
 WORKDIR /app
@@ -67,7 +67,7 @@ EXPOSE 5000
 CMD ["python", "app.py"]
 ```
 
-### 🔸 Exemple pour Django :
+###  Exemple pour Django :
 ```dockerfile
 FROM python:3.10-slim
 WORKDIR /app
@@ -77,7 +77,7 @@ EXPOSE 8000
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 ```
 
-### 🔸 Exemple pour Node.js (Rocket) :
+###  Exemple pour Node.js (Rocket) :
 ```dockerfile
 FROM node:18-alpine
 WORKDIR /app
@@ -91,7 +91,7 @@ Chaque `Dockerfile` est spécifique à la technologie de l’application.
 
 ---
 
-## ⚙️ Étape 3 – Orchestration avec Docker Compose
+##  Étape 3 – Orchestration avec Docker Compose
 
 Le fichier `docker-compose.yml` centralise la configuration des 6 services :
 - Les 4 applications
@@ -138,7 +138,7 @@ services:
 
 ---
 
-## 🌐 Étape 4 – Reverse Proxy avec Nginx
+##  Étape 4 – Reverse Proxy avec Nginx
 
 Le fichier `nginx.conf` permet de rediriger les URLs vers les bons conteneurs.
 
@@ -167,7 +167,7 @@ Cela permet d'accéder aux apps via :
 
 ---
 
-## 🔁 Étape 5 – Lancement de la stack
+##  Étape 5 – Lancement de la stack
 
 Dans un terminal :
 ```bash
@@ -178,7 +178,7 @@ docker ps                    # Vérification des services actifs
 
 ---
 
-## 🔍 Étape 6 – Test et vérification
+##  Étape 6 – Test et vérification
 
 J’ai vérifié chaque URL dans le navigateur. Voici les résultats :
 - ✅ `http://localhost:5001` → Flask Soft accessible directement
@@ -188,13 +188,13 @@ J’ai vérifié chaque URL dans le navigateur. Voici les résultats :
 
 ---
 
-## 💳 Étape 7 – Stripe CLI
+##  Étape 7 – Stripe CLI
 
 J’ai intégré un service Stripe fictif avec `stripe/stripe-cli` pour simuler les paiements.
 
 ---
 
-## 🔁 Étape 8 – Gestion des erreurs et relances
+##  Étape 8 – Gestion des erreurs et relances
 
 Pour relancer après un changement :
 ```bash
@@ -209,7 +209,7 @@ docker-compose logs -f
 
 ---
 
-## 📂 Étape 9 – Dépôt GitHub
+##  Étape 9 – Dépôt GitHub
 
 1. Création du repo sur GitHub
 2. Initialisation locale :
@@ -223,17 +223,18 @@ git push -u origin main
 
 ---
 
-## 👥 Étape 10 – Répartition de l’équipe (exemple)
+##  Étape 10 – Répartition de l’équipe (exemple)
 
 | Membre          | Rôle                         |
 |----------------|------------------------------|
-| Ziad FOURATI    | Chef de projet / Docker      |
+| Younes KOUBOUSSE    | Chef de projet / Docker      |
 | Mohammed BOUHACHLAF | Déploiement / Nginx / Reverse proxy |
-| Collaborateurs  | Dockerfiles / CI / Debug     |
+| Reda ZITOUNI  | Dockerfiles / CI / Debug     |
+| Ayoub MAD  | Testing / Monitoring     |
 
 ---
 
-## 📸 Schéma d’architecture
+##  Schéma d’architecture
 
 ```
          [ Utilisateur ]
