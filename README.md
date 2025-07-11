@@ -231,6 +231,7 @@ git push -u origin main
 | Mohammed BOUHACHLAF | Déploiement / Nginx / Reverse proxy |
 | Reda ZITOUNI  | Dockerfiles / CI / Debug     |
 | Ayoub MAD  | Testing / Monitoring     |
+| Ziad Fourati  | Monitoring / Debug    |
 
 ---
 
