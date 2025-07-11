@@ -1,0 +1,42 @@
+
+version: '3.8'
+
+services:
+  flask-soft:
+    build:
+      context: ./flask-soft
+    ports:
+      - "5001:5000"
+
+  flask-htmlx:
+    build:
+      context: ./flask-htmlx
+    expose:
+      - "5000"
+
+  django-soft:
+    build:
+      context: ./django-soft
+    expose:
+      - "8000"
+
+  rocket:
+    build:
+      context: ./rocket-ecommerce
+    expose:
+      - "3000"
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - flask-htmlx
+      - django-soft
+      - rocket
+
+  stripe:
+    image: stripe/stripe-cli
+    command: listen --forward-to http://host.docker.internal:5001/webhook
