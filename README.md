@@ -1,46 +1,45 @@
+Projet DevSecOps – Déploiement Multi-Applications avec Docker, Nginx et Reverse Proxy
+Auteur : Ayoub MAD / E5 WMD
+Date : 11 juillet 2025
+École : ESTIAM Paris
+Module : E5 – WMD
 
-# Projet DevSecOps – Déploiement Multi-Applications avec Docker, Nginx et Reverse Proxy
+Contexte du projet
+Ce projet a été réalisé dans le cadre du module DevSecOps à ESTIAM. Il avait pour objectif d’apprendre à conteneuriser différentes applications web, à gérer leurs dépendances et à orchestrer leur déploiement grâce à Docker Compose. L’intégration d’un reverse proxy avec Nginx permet de simplifier l’accès aux services et de structurer l’architecture. L’ensemble vise à favoriser l’automatisation et la reproductibilité, conformément aux bonnes pratiques DevSecOps.
 
-## Auteur : Younes KOUBOUSSE / E5 API  
-Date : 11 juillet 2025  
-École : ESTIAM Paris  
-Module : E5 - DevSecOps  
+Objectifs pédagogiques
+Créer des conteneurs isolés pour chaque application.
 
----
+Construire les images à l’aide de Dockerfile adaptés.
 
-##  Contexte du projet
+Orchestrer l’ensemble des services avec un fichier docker-compose.yml.
 
-Ce projet s’inscrit dans le cadre du module DevSecOps de l’école ESTIAM. Il a pour objectif de nous initier à la conteneurisation d’applications, à la gestion des dépendances, au déploiement multi-services via Docker Compose, ainsi qu’à l’intégration d’un reverse proxy (Nginx). Le tout dans une logique d'automatisation et d'orchestration d’environnements logiciels.
+Configurer un reverse proxy Nginx pour centraliser les accès via des URL dédiées.
 
----
+Rédiger une documentation claire et complète décrivant l’infrastructure.
 
-##  Objectifs pédagogiques
+Étape 1 – Organisation et structure du projet
+La première étape a consisté à sélectionner quatre applications web, chacune reposant sur une technologie différente, afin d’illustrer la diversité des environnements :
 
-- Créer un environnement isolé pour chaque application via des conteneurs Docker.
-- Utiliser `Dockerfile` pour construire les images.
-- Mettre en place un `docker-compose.yml` pour orchestrer l’ensemble.
-- Utiliser un reverse proxy (Nginx) pour accéder aux applications via des chemins URL dédiés.
-- Fournir une documentation complète pour décrire l’infrastructure mise en place.
+flask-soft : application simple développée avec Flask.
 
----
+flask-htmlx : application Flask intégrant HTMX.
 
-##  Étape 1 – Structure du projet
+django-soft : application Django.
 
-La première étape a été d’identifier les projets à déployer. J’ai choisi 4 applications web différentes pour illustrer plusieurs technologies :
+rocket-ecommerce : application Node.js orientée e-commerce.
 
-1. **flask-soft** : une application simple en Flask
-2. **flask-htmlx** : une application Flask avec HTMLx (HTMX)
-3. **django-soft** : une application Django
-4. **rocket-ecommerce** : une application Node.js de e-commerce
+Chaque projet a été placé dans un dossier séparé. À la racine, plusieurs fichiers ont été créés :
 
-Chaque application a été décompressée dans un dossier distinct. Ensuite, j’ai créé les fichiers suivants à la racine du projet :
+docker-compose.yml pour coordonner tous les services.
 
-- `docker-compose.yml` → pour l’orchestration
-- `nginx.conf` → pour le reverse proxy
-- `README.md` → pour la documentation
+nginx.conf pour la configuration du reverse proxy.
+
+README.md pour documenter le déploiement et l’architecture.
 
 Structure finale :
-```
+
+Copier le code
 projet-devsecops/
  ┣ flask-soft/
  ┣ flask-htmlx/
@@ -49,56 +48,44 @@ projet-devsecops/
  ┣ docker-compose.yml
  ┣ nginx.conf
  ┗ README.md
-```
+Étape 2 – Création des Dockerfiles
+Chaque application possède un Dockerfile adapté :
 
----
+Exemple Flask :
 
-##  Étape 2 – Dockerisation des applications
-
-J’ai ajouté un fichier `Dockerfile` dans chaque dossier :
-
-###  Exemple pour Flask (flask-soft) :
-```dockerfile
+dockerfile
+Copier le code
 FROM python:3.10-slim
 WORKDIR /app
 COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 CMD ["python", "app.py"]
-```
+Exemple Django :
 
-###  Exemple pour Django :
-```dockerfile
+dockerfile
+Copier le code
 FROM python:3.10-slim
 WORKDIR /app
 COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-```
+Exemple Node.js :
 
-###  Exemple pour Node.js (Rocket) :
-```dockerfile
+dockerfile
+Copier le code
 FROM node:18-alpine
 WORKDIR /app
 COPY . .
 RUN npm install
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
-```
+Étape 3 – Orchestration avec Docker Compose
+Le fichier docker-compose.yml centralise la configuration de l’ensemble des services : les quatre applications, le reverse proxy Nginx et une passerelle Stripe simulée.
 
-Chaque `Dockerfile` est spécifique à la technologie de l’application.
-
----
-
-##  Étape 3 – Orchestration avec Docker Compose
-
-Le fichier `docker-compose.yml` centralise la configuration des 6 services :
-- Les 4 applications
-- Le reverse proxy (nginx)
-- La passerelle Stripe simulée (mock)
-
-```yaml
+yaml
+Copier le code
 services:
   flask-soft:
     build:
@@ -134,15 +121,11 @@ services:
   stripe:
     image: stripe/stripe-cli
     command: listen --forward-to http://host.docker.internal:5001/webhook
-```
+Étape 4 – Configuration du reverse proxy Nginx
+Le fichier nginx.conf redirige les requêtes vers les bons conteneurs selon le chemin URL :
 
----
-
-##  Étape 4 – Reverse Proxy avec Nginx
-
-Le fichier `nginx.conf` permet de rediriger les URLs vers les bons conteneurs.
-
-```nginx
+nginx
+Copier le code
 server {
     listen 80;
 
@@ -158,86 +141,69 @@ server {
         proxy_pass http://rocket:3000;
     }
 }
-```
+Accès via :
 
-Cela permet d'accéder aux apps via :
-- `http://localhost/flask-htmlx/`
-- `http://localhost/django/`
-- `http://localhost/rocket/`
+http://localhost/flask-htmlx/
 
----
+http://localhost/django/
 
-##  Étape 5 – Lancement de la stack
+http://localhost/rocket/
 
-Dans un terminal :
-```bash
-docker-compose build         # Construction des images
-docker-compose up -d         # Démarrage des conteneurs
-docker ps                    # Vérification des services actifs
-```
+Étape 5 – Démarrage de la stack
+Les commandes principales pour construire et lancer l’environnement :
 
----
+bash
+Copier le code
+docker-compose build         # Construire les images
+docker-compose up -d         # Démarrer les services
+docker ps                    # Vérifier les conteneurs en cours d’exécution
+Étape 6 – Vérification et tests
+Les différents points d’accès ont été vérifiés :
 
-##  Étape 6 – Test et vérification
+✅ http://localhost:5001 (Flask Soft en accès direct)
 
-J’ai vérifié chaque URL dans le navigateur. Voici les résultats :
-- ✅ `http://localhost:5001` → Flask Soft accessible directement
-- ✅ `http://localhost/flask-htmlx/`
-- ✅ `http://localhost/django/`
-- ✅ `http://localhost/rocket/`
+✅ http://localhost/flask-htmlx/
 
----
+✅ http://localhost/django/
 
-##  Étape 7 – Stripe CLI
+✅ http://localhost/rocket/
 
-J’ai intégré un service Stripe fictif avec `stripe/stripe-cli` pour simuler les paiements.
+Étape 7 – Simulation des paiements avec Stripe CLI
+Un service stripe/stripe-cli a été intégré pour simuler la réception de paiements et tester les webhooks.
 
----
+Étape 8 – Maintenance et relance des services
+Pour relancer après des modifications :
 
-##  Étape 8 – Gestion des erreurs et relances
-
-Pour relancer après un changement :
-```bash
+bash
+Copier le code
 docker-compose down
 docker-compose up --build -d
-```
+Consulter les logs :
 
-Pour lire les logs :
-```bash
+bash
+Copier le code
 docker-compose logs -f
-```
+Étape 9 – Publication sur GitHub
+Mise en ligne du projet :
 
----
-
-##  Étape 9 – Dépôt GitHub
-
-1. Création du repo sur GitHub
-2. Initialisation locale :
-```bash
+bash
+Copier le code
 git init
 git remote add origin https://github.com/MONUTILISATEUR/projet-devsecops.git
 git add .
 git commit -m "Initial commit"
 git push -u origin main
-```
+Étape 10 – Répartition des rôles au sein de l’équipe
+Membre	Rôle
+Ayoub MAD	Testing / Monitoring
+Younes KOUBOUSSE	Chef de projet / Docker
+Mohammed BOUHACHLAF	Déploiement / Nginx / Reverse proxy
+Reda ZITOUNI	Dockerfiles / CI / Debug
+Ziad Fourati	Monitoring / Debug
 
----
-
-##  Étape 10 – Répartition de l’équipe
-
-| Membre          | Rôle                         |
-|----------------|------------------------------|
-| Younes KOUBOUSSE    | Chef de projet / Docker      |
-| Mohammed BOUHACHLAF | Déploiement / Nginx / Reverse proxy |
-| Reda ZITOUNI  | Dockerfiles / CI / Debug     |
-| Ayoub MAD  | Testing / Monitoring     |
-| Ziad Fourati  | Monitoring / Debug    |
-
----
-
-##  Schéma d’architecture
-
-```
+Schéma d’architecture
+swift
+Copier le code
          [ Utilisateur ]
                |
                v
@@ -248,17 +214,13 @@ git push -u origin main
 flask-htmlx  django-soft  rocket
                |
          [ Stripe CLI ]
-```
+Résultat final
+Quatre applications conteneurisées
 
----
+Reverse proxy opérationnel
 
-## Résultat final
+Documentation complète
 
--  4 applications dockerisées
--  Reverse proxy fonctionnel
--  Documentation complète
--  Lancement automatisé avec Docker Compose
+Déploiement et maintenance automatisés avec Docker Compose
 
----
-
-© 2025 – Younes KOUBOUSSE – ESTIAM Paris
+© 2025 – Ayoub MAD – ESTIAM Paris
