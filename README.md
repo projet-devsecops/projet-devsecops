@@ -223,7 +223,7 @@ git push -u origin main
 
 ---
 
-##  Étape 10 – Répartition de l’équipe (exemple)
+##  Étape 10 – Répartition de l’équipe
 
 | Membre          | Rôle                         |
 |----------------|------------------------------|
