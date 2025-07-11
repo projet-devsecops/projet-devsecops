@@ -257,7 +257,6 @@ flask-htmlx  django-soft  rocket
 -  Reverse proxy fonctionnel
 -  Documentation complète
 -  Lancement automatisé avec Docker Compose
--  Nom bien visible dans le README
 
 ---
 
